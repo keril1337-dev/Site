@@ -8,14 +8,14 @@ main {
 }
 
 .select-sector {
-  position: relative;
   width: 400px;
   box-shadow: 4px 0 8px -4px rgba(0, 0, 0, 0.2);
 }
 
 .program-sector {
+  display: flex;
   position: relative;
-  width: 600px;
+  width: 1000px;
   height: 1000px;
   box-shadow: 4px 0 8px -4px rgba(0, 0, 0, 0.2);
 }
@@ -26,3 +26,4 @@ main {
   border-radius: 100px/50px;
   background: linear-gradient(135deg, #78A8D4 0%, #927ED5 35%, #B86BD8 70%, #D14ED6 100%);
 }
+
