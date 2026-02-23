@@ -40,6 +40,46 @@ function move_object(idd) {
   };
 };
 
+function create_begin(){
+  var begin_block = document.createElement("div");
+
+  begin_block.id = `${count}`;
+  begin_block.style.position = "absolute";
+  console.log("1");
+
+  begin_block.innerHTML = ` <img src="program_sector_img/declaring_begin_block1.svg"
+  width="250"
+  height="150">
+  
+  <button type="button"
+  alt=""
+  id = "delete${count}"
+  width="32px"
+  height="32px"
+  style="position: absolute; right: 20px; bottom: 70px;">
+  X
+  </button>`;
+
+  document.getElementById("program-sector-id").appendChild(begin_block);
+  document.getElementById("create-begin").disabled = true;
+  move_object(begin_block.id);
+  
+  let deleteBtn = begin_block.querySelector(`#delete${count}`);
+
+  
+  deleteBtn.onmousedown = function(event) {
+    event.stopPropagation(); 
+  };
+
+  deleteBtn.onclick = function(event) {
+    begin_block.remove();
+    document.getElementById("create-begin").disabled = false;
+  };
+
+  console.log(count);
+  count+=1;
+
+}
 
 function create_veriable(){
   var skibidi = document.createElement("div");
@@ -88,3 +128,4 @@ function create_veriable(){
 }
 
 document.getElementById("create-variable").addEventListener("click", create_veriable);
+document.getElementById("create-begin").addEventListener("click", create_begin);
