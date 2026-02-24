@@ -58,7 +58,7 @@ function create_begin(){
   X
   </button>`;
 
-  document.getElementById("program-sector-id").appendChild(begin_block);
+  document.getElementById("program-sector-without-cycles-id").appendChild(begin_block);
   document.getElementById("create-begin").disabled = true;
   move_object(begin_block.id);
   
@@ -105,7 +105,7 @@ function create_veriable(){
   X
   </button>`;
 
-  document.getElementById("program-sector-id").appendChild(variable_block);
+  document.getElementById("program-sector-without-cycles-id").appendChild(variable_block);
   move_object(variable_block.id);
   
   let deleteBtn = variable_block.querySelector(`#delete${count}`);
@@ -147,11 +147,11 @@ function create_veriable_edit() {
   class="button"
   alt=""
   id = "delete${count}"
-  style="right: 8px; bottom: 4px; height: 21px">
+  style="right: 8px; bottom: 85px; height: 21px">
   X
   </button>`;
 
-  document.getElementById("program-sector-id").appendChild(variable_edit_block);
+  document.getElementById("program-sector-without-cycles-id").appendChild(variable_edit_block);
   move_object(variable_edit_block.id);
   
   let deleteBtn = variable_edit_block.querySelector(`#delete${count}`);
@@ -168,7 +168,17 @@ function create_veriable_edit() {
   count+=1;
 }
 
+function hide() {
+  sector = document.querySelector(".program-sector-without-cycles");
+  if (sector.classList.contains("hide")){
+    sector.classList.remove("hide");
+  }
+  else {
+    sector.classList.add("hide");
+  }
+}
 
+document.getElementById("togler").addEventListener("click", hide);
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
 document.getElementById("create-variable-edit").addEventListener("click", create_veriable_edit);

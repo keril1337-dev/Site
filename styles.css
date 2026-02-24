@@ -39,6 +39,10 @@ main {
   opacity: 0.5;
 }
 
+.hide{
+  display: none;
+}
+
 .select-sector {
   width: 400px;
   box-shadow: 4px 0 8px -4px rgba(0, 0, 0, 0.2);
