@@ -172,17 +172,34 @@ function create_veriable_edit() {
 }
 
 function create_if_else(){
-  let local_if_id = count_if_true;
+  let local_if_id_true = count_if_true;
+  let local_if_id_false = count_if_false;
   
   var if_else_block = document.createElement("div");
   var if_else_block_true = document.createElement("div");
+  var if_else_block_false = document.createElement("div");
 
-  if_else_block_true.id = `true${local_if_id}`;
+  if_else_block_true.id = `true${local_if_id_true}`;
   if_else_block_true.classList.add("hide");
-  // if_else_block_true.setAttribute("id_cycle", `if-true${count_if_true}`);
+  if_else_block_false.id = `false${local_if_id_false}`;
+  if_else_block_false.classList.add("hide");
 
   if_else_block.id = `${count}`;
   if_else_block.style.position = "absolute";
+
+  if_else_block_true.innerHTML = `<button 
+  class="button"
+  id = "togler_t${local_if_id_true}"
+  type="button">
+  Х
+  </button>"`
+
+  if_else_block_false.innerHTML = `<button 
+  class="button"
+  id = "togler_f${local_if_id_false}"
+  type="button">
+  Х
+  </button>"`
 
   if_else_block.innerHTML = ` <img src="program_sector_img/if-else.svg"
   style="width: 450px; height: auto">
@@ -213,21 +230,47 @@ function create_if_else(){
 
   document.getElementById(current_cycle_step.at(-1)).appendChild(if_else_block);
   document.getElementById("program-sector-id").appendChild(if_else_block_true);
+  document.getElementById("program-sector-id").appendChild(if_else_block_false);
 
   move_object(if_else_block.id);
   
   let ifTrueBtn = document.querySelector(`#if-true${count_if_true}`);
-  let ifFalseBtn = if_else_block.querySelector(`#if-false${count_if_false}`);
-  let deleteBtn = if_else_block.querySelector(`#delete${count}`);
+  let ifFalseBtn = document.querySelector(`#if-false${count_if_false}`);
 
   ifTrueBtn.onmousedown = function(event) {
     event.stopPropagation();
   }
 
+  ifFalseBtn.onmousedown = function(event) {
+    event.stopPropagation();
+  }
+
   ifTrueBtn.onclick = function(event) {
     document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
-    current_cycle_step.push(`true${local_if_id}`);
-    document.getElementById(`true${local_if_id}`).classList.remove("hide");
+    current_cycle_step.push(`true${local_if_id_true}`);
+    document.getElementById(`true${local_if_id_true}`).classList.remove("hide");
+  }
+
+  ifFalseBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.push(`false${local_if_id_false}`);
+    document.getElementById(`false${local_if_id_false}`).classList.remove("hide");
+  }
+
+  let deleteBtn = if_else_block.querySelector(`#delete${count}`);
+  let backTrueBtn = document.getElementById(`togler_t${local_if_id_true}`);
+  let backFalseBtn = document.getElementById(`togler_f${local_if_id_false}`);
+  
+  backTrueBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.pop();
+    document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
+  }
+
+  backFalseBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.pop();
+    document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
   }
 
   deleteBtn.onmousedown = function(event) {
@@ -241,21 +284,13 @@ function create_if_else(){
   console.log(count);
   count+=1;
   count_if_true+=1;
+  count_if_false+=1;
 }
 
-function hide() {
-  sector = document.querySelector(".program-sector-without-cycles");
+// function back() {
+  
+// }
 
-  if (sector.classList.contains("hide")){
-    sector.classList.remove("hide");
-  }
-  else {
-    sector.classList.add("hide");
-  }
-
-}
-
-document.getElementById("togler").addEventListener("click", hide);
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
 document.getElementById("create-variable-edit").addEventListener("click", create_veriable_edit);
