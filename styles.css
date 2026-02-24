@@ -3,6 +3,10 @@ html, body {
   padding: 0;
 }
 
+main {
+  display: flex;
+}
+
 .block-input {
   border: 0;
   outline: 0;
@@ -14,11 +18,12 @@ html, body {
   line-height: 20px;
   font-weight: 400;
   padding: 4px 8px;
+  position: absolute;
   vertical-align: middle;
   transition: background-color .24s, box-shadow .24s;
 }
 
-.delete-button {
+.button {
   background: #fff;
   border: 0;
   border-radius: 4px;
@@ -26,11 +31,12 @@ html, body {
   color: rgb(60, 66, 87);
   font-weight: bold;
   padding: 4px 10px;
+  position: absolute;
   transition: all 0.2s;
 }
 
-main {
-  display: flex;
+.button[disabled] {
+  opacity: 0.5;
 }
 
 .select-sector {

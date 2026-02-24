@@ -40,21 +40,23 @@ function move_object(idd) {
 
 function create_begin(){
   var begin_block = document.createElement("div");
+  alert("хуй");
 
   begin_block.id = `${count}`;
   begin_block.style.position = "absolute";
   console.log("1");
 
-  begin_block.innerHTML = ` <img src="program_sector_img/declaring_begin_block1.svg"
-  width="250"
-  height="150">
+  begin_block.innerHTML = ` <img src="program_sector_img/begin.svg"
+  width="200"
+  height="50">
   
   <button type="button"
+  class="button"
   alt=""
   id = "delete${count}"
   width="32px"
   height="32px"
-  style="position: absolute; right: 20px; bottom: 70px;">
+  style="right: 4px; bottom: 25px; width: 30px; height: 20px">
   X
   </button>`;
 
@@ -85,7 +87,7 @@ function create_veriable(){
   skibidi.id = `${count}`;
   skibidi.style.position = "absolute";
 
-  skibidi.innerHTML = ` <img src="program_sector_img/declaring_variable_block (1).svg"
+  skibidi.innerHTML = ` <img src="program_sector_img/declaring-variable.svg"
   width="150"
   height="27"
   style="display: block">
@@ -95,13 +97,13 @@ function create_veriable(){
   name="name" 
   maxlength="8"
   size="8"
-  style="position: absolute; right: 55px; bottom: 4px; width: 60px; height: 12px">
+  style="right: 50px; bottom: 5px; width: 60px; height: 12px">
 
   <button type="button"
-  class="delete-button"
+  class="button"
   alt=""
   id = "delete${count}"
-  style="position: absolute; right: 8px; bottom: 4px; height: 21px">
+  style="right: 8px; bottom: 4px; height: 21px">
   X
   </button>`;
 
@@ -124,5 +126,5 @@ function create_veriable(){
 
 }
 
-document.getElementById("create-variable").addEventListener("click", create_veriable);
 document.getElementById("create-begin").addEventListener("click", create_begin);
+document.getElementById("create-variable").addEventListener("click", create_veriable);
