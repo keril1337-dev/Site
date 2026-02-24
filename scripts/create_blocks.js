@@ -44,7 +44,6 @@ function create_begin(){
 
   begin_block.id = `${count}`;
   begin_block.style.position = "absolute";
-  console.log("1");
 
   begin_block.innerHTML = ` <img src="program_sector_img/begin.svg"
   width="200"
@@ -107,7 +106,6 @@ function create_veriable(){
   X
   </button>`;
 
-  console.log("23232");
   document.getElementById("program-sector-id").appendChild(skibidi);
   move_object(skibidi.id);
   
@@ -123,7 +121,6 @@ function create_veriable(){
 
   console.log(count);
   count+=1;
-
 }
 
 document.getElementById("create-begin").addEventListener("click", create_begin);
