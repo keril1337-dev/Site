@@ -46,8 +46,7 @@ function create_begin(){
   begin_block.style.position = "absolute";
 
   begin_block.innerHTML = ` <img src="program_sector_img/begin.svg"
-  width="200"
-  height="50">
+  style="width: 320px; height: auto">
   
   <button type="button"
   class="button"
@@ -81,12 +80,12 @@ function create_begin(){
 }
 
 function create_veriable(){
-  var skibidi = document.createElement("div");
+  var variable_block = document.createElement("div");
 
-  skibidi.id = `${count}`;
-  skibidi.style.position = "absolute";
+  variable_block.id = `${count}`;
+  variable_block.style.position = "absolute";
 
-  skibidi.innerHTML = ` <img src="program_sector_img/declaring-variable.svg"
+  variable_block.innerHTML = ` <img src="program_sector_img/declaring-variable.svg"
   width="150"
   height="27"
   style="display: block">
@@ -106,22 +105,71 @@ function create_veriable(){
   X
   </button>`;
 
-  document.getElementById("program-sector-id").appendChild(skibidi);
-  move_object(skibidi.id);
+  document.getElementById("program-sector-id").appendChild(variable_block);
+  move_object(variable_block.id);
   
-  let deleteBtn = skibidi.querySelector(`#delete${count}`);
+  let deleteBtn = variable_block.querySelector(`#delete${count}`);
   
   deleteBtn.onmousedown = function(event) {
     event.stopPropagation(); 
   };
 
   deleteBtn.onclick = function(event) {
-    skibidi.remove();
+    variable_block.remove();
   };
 
   console.log(count);
   count+=1;
 }
 
+function create_veriable_edit() {
+  var variable_edit_block = document.createElement("div");
+
+  variable_edit_block.id = `${count}`;
+  variable_edit_block.style.position = "absolute";
+
+  variable_edit_block.innerHTML = ` <img src="program_sector_img/variable-edit.svg"
+  style="width: 500px; height: auto">
+  
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  maxlength="8"
+  size="8"
+  style="right: 205px; bottom: 42px; width: 105px; height: 25px">
+
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="right: 35px; bottom: 42px; width: 105px; height: 25px">
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="right: 8px; bottom: 4px; height: 21px">
+  X
+  </button>`;
+
+  document.getElementById("program-sector-id").appendChild(variable_edit_block);
+  move_object(variable_edit_block.id);
+  
+  let deleteBtn = variable_edit_block.querySelector(`#delete${count}`);
+  
+  deleteBtn.onmousedown = function(event) {
+    event.stopPropagation(); 
+  };
+
+  deleteBtn.onclick = function(event) {
+    variable_edit_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+}
+
+
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
+document.getElementById("create-variable-edit").addEventListener("click", create_veriable_edit);
+
