@@ -13,9 +13,8 @@ function move_object(idd) {
 
     function moveAt(pageX, pageY) {
       let left = pageX - rect_zone.left - shiftX;
-      let top = pageY - rect_zone.top - shiftX;
+      let top = pageY - rect_zone.top - shiftY;
 
-      
       left = Math.max(0, Math.min(left, zone.offsetWidth - object.offsetWidth));
       top = Math.max(0, Math.min(top, zone.offsetHeight - object.offsetHeight));
 
@@ -28,7 +27,6 @@ function move_object(idd) {
     }
 
     document.addEventListener('mousemove', onMouseMove);
-
     document.addEventListener('mouseup', function onMouseUp() {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -87,23 +85,23 @@ function create_veriable(){
   skibidi.id = `${count}`;
   skibidi.style.position = "absolute";
 
-  skibidi.innerHTML = ` <img src="program_sector_img/declaring_variable_block.svg"
-  width="250"
-  height="150">
+  skibidi.innerHTML = ` <img src="program_sector_img/declaring_variable_block (1).svg"
+  width="150"
+  height="27"
+  style="display: block">
   
-  <input type="text" 
+  <input type="text"
+  class="block-input" 
   name="name" 
   maxlength="8"
   size="8"
-  placeholder="Переменная"
-  style="position: absolute; right: 80px; bottom: 70px">
+  style="position: absolute; right: 55px; bottom: 4px; width: 60px; height: 12px">
 
   <button type="button"
+  class="delete-button"
   alt=""
   id = "delete${count}"
-  width="32px"
-  height="32px"
-  style="position: absolute; right: 20px; bottom: 70px;">
+  style="position: absolute; right: 8px; bottom: 4px; height: 21px">
   X
   </button>`;
 
@@ -112,7 +110,6 @@ function create_veriable(){
   move_object(skibidi.id);
   
   let deleteBtn = skibidi.querySelector(`#delete${count}`);
-
   
   deleteBtn.onmousedown = function(event) {
     event.stopPropagation(); 

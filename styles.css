@@ -3,6 +3,32 @@ html, body {
   padding: 0;
 }
 
+.block-input {
+  border: 0;
+  outline: 0;
+  color: rgb(60, 66, 87);
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 0 1px rgba(60, 66, 87, 0.16);
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 4px 8px;
+  vertical-align: middle;
+  transition: background-color .24s, box-shadow .24s;
+}
+
+.delete-button {
+  background: #fff;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(60, 66, 87, 0.16);
+  color: rgb(60, 66, 87);
+  font-weight: bold;
+  padding: 4px 10px;
+  transition: all 0.2s;
+}
+
 main {
   display: flex;
 }
