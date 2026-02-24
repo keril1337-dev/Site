@@ -172,10 +172,12 @@ function create_veriable_edit() {
 }
 
 function create_if_else(){
+  let local_if_id = count_if_true;
+  
   var if_else_block = document.createElement("div");
   var if_else_block_true = document.createElement("div");
 
-  if_else_block_true.id = `true${count_if_true}`;
+  if_else_block_true.id = `true${local_if_id}`;
   if_else_block_true.classList.add("hide");
   // if_else_block_true.setAttribute("id_cycle", `if-true${count_if_true}`);
 
@@ -209,7 +211,7 @@ function create_if_else(){
   Изменить
   </button>`;
 
-  document.getElementById("program-sector-id").appendChild(if_else_block);
+  document.getElementById(current_cycle_step.at(-1)).appendChild(if_else_block);
   document.getElementById("program-sector-id").appendChild(if_else_block_true);
 
   move_object(if_else_block.id);
@@ -224,8 +226,8 @@ function create_if_else(){
 
   ifTrueBtn.onclick = function(event) {
     document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
-    current_cycle_step.push(`true${count_if_true}`);
-    document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
+    current_cycle_step.push(`true${local_if_id}`);
+    document.getElementById(`true${local_if_id}`).classList.remove("hide");
   }
 
   deleteBtn.onmousedown = function(event) {
