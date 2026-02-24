@@ -1,4 +1,7 @@
 let count = 0;
+let count_if_true = 0;
+let count_if_false = 0;
+let current_cycle_step = ["program-sector-without-cycles-id"];
 
 function move_object(idd) {
   const object = document.getElementById(idd);
@@ -58,7 +61,7 @@ function create_begin(){
   X
   </button>`;
 
-  document.getElementById("program-sector-without-cycles-id").appendChild(begin_block);
+  document.getElementById(current_cycle_step.at(-1)).appendChild(begin_block);
   document.getElementById("create-begin").disabled = true;
   move_object(begin_block.id);
   
@@ -105,7 +108,7 @@ function create_veriable(){
   X
   </button>`;
 
-  document.getElementById("program-sector-without-cycles-id").appendChild(variable_block);
+  document.getElementById(current_cycle_step.at(-1)).appendChild(variable_block);
   move_object(variable_block.id);
   
   let deleteBtn = variable_block.querySelector(`#delete${count}`);
@@ -151,7 +154,7 @@ function create_veriable_edit() {
   X
   </button>`;
 
-  document.getElementById("program-sector-without-cycles-id").appendChild(variable_edit_block);
+  document.getElementById(current_cycle_step.at(-1)).appendChild(variable_edit_block);
   move_object(variable_edit_block.id);
   
   let deleteBtn = variable_edit_block.querySelector(`#delete${count}`);
@@ -168,18 +171,90 @@ function create_veriable_edit() {
   count+=1;
 }
 
+function create_if_else(){
+  var if_else_block = document.createElement("div");
+  var if_else_block_true = document.createElement("div");
+
+  if_else_block_true.id = `true${count_if_true}`;
+  if_else_block_true.classList.add("hide");
+  // if_else_block_true.setAttribute("id_cycle", `if-true${count_if_true}`);
+
+  if_else_block.id = `${count}`;
+  if_else_block.style.position = "absolute";
+
+  if_else_block.innerHTML = ` <img src="program_sector_img/if-else.svg"
+  style="width: 450px; height: auto">
+  
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="left: 300px; bottom: 90px; height: 21px">
+  X
+  </button>
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "if-true${count_if_true}"
+  style="left: 85px; bottom: 130px; height: 21px">
+  Изменить
+  </button>
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "if-false${count_if_false}"
+  style="left: 190px; bottom: 58px; height: 21px">
+  Изменить
+  </button>`;
+
+  document.getElementById("program-sector-id").appendChild(if_else_block);
+  document.getElementById("program-sector-id").appendChild(if_else_block_true);
+
+  move_object(if_else_block.id);
+  
+  let ifTrueBtn = document.querySelector(`#if-true${count_if_true}`);
+  let ifFalseBtn = if_else_block.querySelector(`#if-false${count_if_false}`);
+  let deleteBtn = if_else_block.querySelector(`#delete${count}`);
+
+  ifTrueBtn.onmousedown = function(event) {
+    event.stopPropagation();
+  }
+
+  ifTrueBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.push(`true${count_if_true}`);
+    document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
+  }
+
+  deleteBtn.onmousedown = function(event) {
+    event.stopPropagation(); 
+  };
+
+  deleteBtn.onclick = function(event) {
+    if_else_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+  count_if_true+=1;
+}
+
 function hide() {
   sector = document.querySelector(".program-sector-without-cycles");
+
   if (sector.classList.contains("hide")){
     sector.classList.remove("hide");
   }
   else {
     sector.classList.add("hide");
   }
+
 }
 
 document.getElementById("togler").addEventListener("click", hide);
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
 document.getElementById("create-variable-edit").addEventListener("click", create_veriable_edit);
-
+document.getElementById("create-if-else").addEventListener("click", create_if_else);
