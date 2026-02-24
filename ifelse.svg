@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_Слой_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 250 120">
+  <!-- Generator: Adobe Illustrator 29.8.3, SVG Export Plug-In . SVG Version: 2.1.1 Build 3)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #ce8a28;
+      }
+
+      .st1 {
+        fill: #cf8b17;
+      }
+
+      .st2, .st3, .st4 {
+        fill: #ffab19;
+      }
+
+      .st3, .st4 {
+        stroke: #cf8b17;
+        stroke-width: 2px;
+      }
+
+      .st4 {
+        stroke-linejoin: round;
+      }
+
+      .st5 {
+        fill: #fff;
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+        font-size: 12px;
+      }
+    </style>
+  </defs>
+  <path class="st3" d="M185.06,47.67v35.45h-16.07v7.44h16.07v1.25c0,4.83-3.87,8.75-8.63,8.75H49.12c-4.76,0-8.62-3.92-8.62-8.75v-45.48c0-4.82,3.86-8.74,8.62-8.74h127.31c1.84,0,3.54.58,4.94,1.58h-14.94v8.5h18.63Z"/>
+  <polygon class="st4" points="166.43 39.17 166.43 47.67 185.06 47.67 185.06 65.83 40.5 65.83 40.5 21 50.35 21 50.35 28.42 87.6 28.42 87.6 21 185.06 21 185.06 39.17 166.43 39.17"/>
+  <text/>
+  <text/>
+  <text/>
+  <text class="st5" transform="translate(117.56 46.11) scale(.99 1)"><tspan x="0" y="0">если</tspan></text>
+  <path class="st1" d="M55.05,35.33h33.84c4.01,0,7.25,3.78,7.25,8.46h0c0,4.67-3.25,8.46-7.25,8.46h-33.84c-4.01,0-7.25-3.78-7.25-8.46h0c0-4.67,3.25-8.46,7.25-8.46Z"/>
+  <text class="st5" transform="translate(57.27 88.31)"><tspan x="0" y="0">иначе</tspan></text>
+  <rect class="st2" x="50.35" y="98.75" width="37.25" height="8.5"/>
+  <path class="st1" d="M112.55,77.07h33.84c4.01,0,7.25,3.78,7.25,8.46h0c0,4.67-3.25,8.46-7.25,8.46h-33.84c-4.01,0-7.25-3.78-7.25-8.46h0c0-4.67,3.25-8.46,7.25-8.46Z"/>
+  <rect class="st2" x="153.65" y="81.28" width="30.34" height="12.71"/>
+  <rect class="st0" x="183.98" y="84.1" width="2.07" height="5.9"/>
+</svg>
