@@ -309,13 +309,13 @@ function create_while(){
 
 
   while_block.innerHTML = ` <img src="program_sector_img/while.svg"
-  style="width: 450px; height: auto">
+  style="width: 500px; height: auto">
   
   <button type="button"
   class="button"
   alt=""
   id = "delete${count}"
-  style="left: 300px; bottom: 90px; height: 21px">
+  style="left: 320px; bottom: 110px; height: 21px">
   X
   </button>
 
@@ -323,7 +323,7 @@ function create_while(){
   class="button"
   alt=""
   id = "togler_in${local_while}"
-  style="left: 125px; bottom: 70px; height: 40px; width: 160px">
+  style="left: 140px; bottom: 80px; height: 40px; width: 160px">
   Изменить
   </button>`
 
@@ -366,9 +366,65 @@ function create_while(){
   count_while+=1;
 }
 
+function create_operation() {
+  var create_operation_block = document.createElement("div");
+
+  create_operation_block.id = `${count}`;
+  create_operation_block.style.position = "absolute";
+
+  create_operation_block.innerHTML = ` <img src="program_sector_img/operation.svg"
+  style="width: 240px; height: auto">
+  
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  maxlength="8"
+  size="8"
+  style="right: 127px; bottom: 38px; width: 55px; height: 25px">
+  
+  <select name="operations" id="operations${count}"
+  style="position: absolute; left: 110px; top: 40px">
+    <option value="=="> == </option>
+    <option value="=="> < </option>
+    <option value="=="> > </option>
+    <option value="=="> <= </option>
+    <option value="=="> >= </option>
+  </select>
+
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="right: 25px; bottom: 38px; width: 55px; height: 25px">
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="right: 8px; bottom: 85px; height: 21px">
+  X
+  </button>`;
+
+  document.getElementById(current_cycle_step.at(-1)).appendChild(create_operation_block);
+  move_object(create_operation_block.id);
+  
+  let deleteBtn = create_operation_block.querySelector(`#delete${count}`);
+  
+  deleteBtn.onmousedown = function(event) {
+    event.stopPropagation(); 
+  };
+
+  deleteBtn.onclick = function(event) {
+    create_operation_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+}
+
 
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
 document.getElementById("create-variable-edit").addEventListener("click", create_veriable_edit);
 document.getElementById("create-if-else").addEventListener("click", create_if_else);
 document.getElementById("create-while").addEventListener("click", create_while);
+document.getElementById("create-operation").addEventListener("click", create_operation);
