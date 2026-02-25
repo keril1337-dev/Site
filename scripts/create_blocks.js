@@ -31,6 +31,7 @@ function move_object(idd) {
     }
 
     document.addEventListener('mousemove', onMouseMove);
+
     document.addEventListener('mouseup', function onMouseUp() {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -43,12 +44,10 @@ function move_object(idd) {
 };
 
 function create_begin(){
-  var begin_block = document.createElement("div");
-  alert("хуй");
+  let begin_block = document.createElement("div");
 
   begin_block.id = `${count}`;
   begin_block.style.position = "absolute";
-
   begin_block.innerHTML = ` <img src="program_sector_img/begin.svg"
   style="width: 320px; height: auto">
   
@@ -68,11 +67,6 @@ function create_begin(){
   
   let deleteBtn = begin_block.querySelector(`#delete${count}`);
 
-  
-  deleteBtn.onmousedown = function(event) {
-    event.stopPropagation(); 
-  };
-
   deleteBtn.onclick = function(event) {
     begin_block.remove();
     document.getElementById("create-begin").disabled = false;
@@ -80,15 +74,13 @@ function create_begin(){
 
   console.log(count);
   count+=1;
-
 }
 
 function create_veriable(){
-  var variable_block = document.createElement("div");
+  let variable_block = document.createElement("div");
 
   variable_block.id = `${count}`;
   variable_block.style.position = "absolute";
-
   variable_block.innerHTML = ` <img src="program_sector_img/declaring-variable.svg"
   width="150"
   height="27"
@@ -113,10 +105,6 @@ function create_veriable(){
   move_object(variable_block.id);
   
   let deleteBtn = variable_block.querySelector(`#delete${count}`);
-  
-  deleteBtn.onmousedown = function(event) {
-    event.stopPropagation(); 
-  };
 
   deleteBtn.onclick = function(event) {
     variable_block.remove();
@@ -127,11 +115,10 @@ function create_veriable(){
 }
 
 function create_veriable_edit() {
-  var variable_edit_block = document.createElement("div");
+  let variable_edit_block = document.createElement("div");
 
   variable_edit_block.id = `${count}`;
   variable_edit_block.style.position = "absolute";
-
   variable_edit_block.innerHTML = ` <img src="program_sector_img/variable-edit.svg"
   style="width: 500px; height: auto">
   
@@ -160,10 +147,6 @@ function create_veriable_edit() {
   
   let deleteBtn = variable_edit_block.querySelector(`#delete${count}`);
   
-  deleteBtn.onmousedown = function(event) {
-    event.stopPropagation(); 
-  };
-
   deleteBtn.onclick = function(event) {
     variable_edit_block.remove();
   };
@@ -176,9 +159,9 @@ function create_if_else(){
   let local_if_id_true = count_if_true;
   let local_if_id_false = count_if_false;
   
-  var if_else_block = document.createElement("div");
-  var if_else_block_true = document.createElement("div");
-  var if_else_block_false = document.createElement("div");
+  let if_else_block = document.createElement("div");
+  let if_else_block_true = document.createElement("div");
+  let if_else_block_false = document.createElement("div");
 
   if_else_block_true.id = `true${local_if_id_true}`;
   if_else_block_true.classList.add("hide");
@@ -274,10 +257,6 @@ function create_if_else(){
     document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
   }
 
-  deleteBtn.onmousedown = function(event) {
-    event.stopPropagation(); 
-  };
-
   deleteBtn.onclick = function(event) {
     if_else_block.remove();
   };
@@ -291,8 +270,8 @@ function create_if_else(){
 function create_while(){
   let local_while = count_while;
   
-  var while_block = document.createElement("div");
-  var while_change_zone = document.createElement("div");
+  let while_block = document.createElement("div");
+  let while_change_zone = document.createElement("div");
 
   while_change_zone.id = `while${local_while}`;
   while_change_zone.classList.add("hide");
@@ -306,7 +285,6 @@ function create_while(){
   type="button">
   Х
   </button>"`
-
 
   while_block.innerHTML = ` <img src="program_sector_img/while.svg"
   style="width: 500px; height: auto">
@@ -353,10 +331,6 @@ function create_while(){
     document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
   }
 
-  deleteBtn.onmousedown = function(event) {
-    event.stopPropagation(); 
-  };
-
   deleteBtn.onclick = function(event) {
     while_block.remove();
   };
@@ -367,7 +341,7 @@ function create_while(){
 }
 
 function create_operation() {
-  var create_operation_block = document.createElement("div");
+  let create_operation_block = document.createElement("div");
 
   create_operation_block.id = `${count}`;
   create_operation_block.style.position = "absolute";
@@ -408,10 +382,6 @@ function create_operation() {
   move_object(create_operation_block.id);
   
   let deleteBtn = create_operation_block.querySelector(`#delete${count}`);
-  
-  deleteBtn.onmousedown = function(event) {
-    event.stopPropagation(); 
-  };
 
   deleteBtn.onclick = function(event) {
     create_operation_block.remove();
@@ -421,6 +391,35 @@ function create_operation() {
   count+=1;
 }
 
+function create_end() {
+  let create_end_block = document.createElement("div");
+
+  create_end_block.id = `${count}`;
+  create_end_block.style.position = "absolute";
+
+  create_end_block.innerHTML = ` <img src="program_sector_img/end.svg"
+  style="width: 210px; height: auto">
+  
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="right: 2px; bottom: 5px; height: 21px">
+  X
+  </button>`;
+
+  document.getElementById(current_cycle_step.at(-1)).appendChild(create_end_block);
+  move_object(create_end_block.id);
+  
+  let deleteBtn = create_end_block.querySelector(`#delete${count}`);
+
+  deleteBtn.onclick = function(event) {
+    create_end_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+}
 
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
@@ -428,3 +427,4 @@ document.getElementById("create-variable-edit").addEventListener("click", create
 document.getElementById("create-if-else").addEventListener("click", create_if_else);
 document.getElementById("create-while").addEventListener("click", create_while);
 document.getElementById("create-operation").addEventListener("click", create_operation);
+document.getElementById("create-end").addEventListener("click", create_end);
