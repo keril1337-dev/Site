@@ -1,6 +1,7 @@
 let count = 0;
 let count_if_true = 0;
 let count_if_false = 0;
+let count_while = 0;
 let current_cycle_step = ["program-sector-without-cycles-id"];
 
 function move_object(idd) {
@@ -287,11 +288,87 @@ function create_if_else(){
   count_if_false+=1;
 }
 
-// function back() {
+function create_while(){
+  let local_while = count_while;
   
-// }
+  var while_block = document.createElement("div");
+  var while_change_zone = document.createElement("div");
+
+  while_change_zone.id = `while${local_while}`;
+  while_change_zone.classList.add("hide");
+
+  while_block.id = `${count}`;
+  while_block.style.position = "absolute";
+
+  while_change_zone.innerHTML = `<button 
+  class="button"
+  id = "togler_out${local_while}"
+  type="button">
+  Х
+  </button>"`
+
+
+  while_block.innerHTML = ` <img src="program_sector_img/while.svg"
+  style="width: 450px; height: auto">
+  
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="left: 300px; bottom: 90px; height: 21px">
+  X
+  </button>
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "togler_in${local_while}"
+  style="left: 125px; bottom: 70px; height: 40px; width: 160px">
+  Изменить
+  </button>`
+
+  document.getElementById(current_cycle_step.at(-1)).appendChild(while_block);
+  document.getElementById("program-sector-id").appendChild(while_change_zone);
+
+  move_object(while_block.id);
+  
+  let changeBtn = document.querySelector(`#togler_in${local_while}`);
+
+  changeBtn.onmousedown = function(event) {
+    event.stopPropagation();
+  }
+
+  changeBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.push(`while${local_while}`);
+    document.getElementById(`while${local_while}`).classList.remove("hide");
+  }
+
+  let deleteBtn = while_block.querySelector(`#delete${count}`);
+  let backBtn = document.getElementById(`togler_out${local_while}`);
+
+  backBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.pop();
+    document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
+  }
+
+  deleteBtn.onmousedown = function(event) {
+    event.stopPropagation(); 
+  };
+
+  deleteBtn.onclick = function(event) {
+    while_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+  count_while+=1;
+}
+
 
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
 document.getElementById("create-variable-edit").addEventListener("click", create_veriable_edit);
 document.getElementById("create-if-else").addEventListener("click", create_if_else);
+document.getElementById("create-while").addEventListener("click", create_while);
