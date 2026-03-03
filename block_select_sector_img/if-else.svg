@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="_Слой_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 250 120">
+<svg id="_Слой_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 52.5 34.94">
   <!-- Generator: Adobe Illustrator 29.8.3, SVG Export Plug-In . SVG Version: 2.1.1 Build 3)  -->
   <defs>
     <style>
@@ -11,36 +11,43 @@
         fill: #cf8b17;
       }
 
+      .st2 {
+        font-size: 5.41px;
+      }
+
+      .st2, .st3 {
+        fill: #fff;
+        font-family: ArialMT, Arial;
+      }
+
       .st2, .st3, .st4 {
-        fill: #ffab19;
-      }
-
-      .st3, .st4 {
-        stroke: #cf8b17;
-        stroke-width: 2px;
-      }
-
-      .st4 {
-        stroke-linejoin: round;
+        isolation: isolate;
       }
 
       .st5 {
-        fill: #fff;
-        font-family: MyriadPro-Regular, 'Myriad Pro';
-        font-size: 12px;
+        fill: #ffab19;
+      }
+
+      .st3 {
+        font-size: 5.3px;
       }
     </style>
   </defs>
-  <path class="st3" d="M185.06,47.67v35.45h-16.07v7.44h16.07v1.25c0,4.83-3.87,8.75-8.63,8.75H49.12c-4.76,0-8.62-3.92-8.62-8.75v-45.48c0-4.82,3.86-8.74,8.62-8.74h127.31c1.84,0,3.54.58,4.94,1.58h-14.94v8.5h18.63Z"/>
-  <polygon class="st4" points="166.43 39.17 166.43 47.67 185.06 47.67 185.06 65.83 40.5 65.83 40.5 21 50.35 21 50.35 28.42 87.6 28.42 87.6 21 185.06 21 185.06 39.17 166.43 39.17"/>
-  <text/>
-  <text/>
-  <text/>
-  <text class="st5" transform="translate(117.56 46.11) scale(.99 1)"><tspan x="0" y="0">если</tspan></text>
-  <path class="st1" d="M55.05,35.33h33.84c4.01,0,7.25,3.78,7.25,8.46h0c0,4.67-3.25,8.46-7.25,8.46h-33.84c-4.01,0-7.25-3.78-7.25-8.46h0c0-4.67,3.25-8.46,7.25-8.46Z"/>
-  <text class="st5" transform="translate(57.27 88.31)"><tspan x="0" y="0">иначе</tspan></text>
-  <rect class="st2" x="50.35" y="98.75" width="37.25" height="8.5"/>
-  <path class="st1" d="M112.55,77.07h33.84c4.01,0,7.25,3.78,7.25,8.46h0c0,4.67-3.25,8.46-7.25,8.46h-33.84c-4.01,0-7.25-3.78-7.25-8.46h0c0-4.67,3.25-8.46,7.25-8.46Z"/>
-  <rect class="st2" x="153.65" y="81.28" width="30.34" height="12.71"/>
-  <rect class="st0" x="183.98" y="84.1" width="2.07" height="5.9"/>
+  <g>
+    <path class="st5" d="M51.72,27.83v-2.35h0v-.39h.38v-14.11h-6.68v-3.38h6.68V.37H17.19v2.95H3.84V.37H.31v28.18c0,1.92,1.38,3.48,3.09,3.48h.44v2.66h13.35v-2.66h31.83c1.71,0,3.09-1.56,3.09-3.48v-.5h-.38v-.22h0Z"/>
+    <rect class="st0" x="51.72" y="25.48" width=".39" height="2.35"/>
+  </g>
+  <g class="st4">
+    <g class="st4">
+      <text class="st2" transform="translate(26.93 11.33) scale(1.09 1)"><tspan x="0" y="0">если</tspan></text>
+    </g>
+  </g>
+  <g class="st4">
+    <g class="st4">
+      <text class="st3" transform="translate(5.77 27.83) scale(.94 1)"><tspan x="0" y="0">иначе</tspan></text>
+    </g>
+  </g>
+  <rect class="st5" x="51.72" y="25.07" width=".39" height="2.98"/>
+  <path class="st1" d="M6.06,6.89h11.78c1.4,0,2.52,1.1,2.52,2.47h0c0,1.36-1.13,2.47-2.52,2.47H6.06c-1.4,0-2.52-1.1-2.52-2.47h0c0-1.36,1.13-2.47,2.52-2.47Z"/>
+  <path class="st1" d="M30.73,23.01h11.78c1.4,0,2.52,1.1,2.52,2.47h0c0,1.36-1.13,2.47-2.52,2.47h-11.78c-1.4,0-2.52-1.1-2.52-2.47h0c0-1.36,1.13-2.47,2.52-2.47Z"/>
 </svg>
