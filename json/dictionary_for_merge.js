@@ -34,11 +34,4 @@ const dict_merge = {
   "while_vstup_y" : 5,
   "while_vistup_x" : 54,
   "while_vistup_y" : 151,
-
-  "output_x_bottom" : 40,
-  "output_y_bottom" : 7,
-  "output_x_top" : 4,
-  "output_y_top" : 132,
-  "output_vstup_x" : 17,
-  "output_vstup_y" : 129,
 }

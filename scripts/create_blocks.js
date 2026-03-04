@@ -21,7 +21,7 @@ function merge(idd){
       return;
     }
 
-    ccoord_cur_element = element.getBoundingClientRect();
+    coord_cur_element = element.getBoundingClientRect();
     cur_element_bottom_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_bottom`];
     cur_element_bottom_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_bottom`];
     cur_element_top_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_top`];
@@ -52,7 +52,7 @@ function merge(idd){
       const objVstupX = dict_merge[`${object.dataset.name}_vstup_x`];
       const objVstupY = dict_merge[`${object.dataset.name}_vstup_y`];
       const elVistupX = dict_merge[`${element.dataset.name}_vistup_x`];
-      const elVistupY = dict_merge[`${element.dataset.name}_vistup_y`];
+      const elVistupY = dict_merge[`${element.dataset.name}_vistup_y`]; elvistu
 
       Left = objVstupX - elVistupX;
       Top = objVstupY - elVistupY;
