@@ -4,16 +4,88 @@ let count_if_false = 0;
 let count_while = 0;
 let current_cycle_step = ["program-sector-without-cycles-id"];
 
+function merge(idd){
+  const object = document.getElementById(idd);
+  const current_sector = document.querySelector(`#${current_cycle_step.at(-1)}`);
+  const elements = current_sector.querySelectorAll(".block");
+  const coord = object.getBoundingClientRect();
+
+  obj_x_bottom = coord.left + dict_merge[`${object.dataset.name}_x_bottom`];
+  obj_y_bottom = coord.top + dict_merge[`${object.dataset.name}_y_bottom`];
+  obj_x_top = coord.left + dict_merge[`${object.dataset.name}_x_top`];
+  obj_y_top = coord.top + dict_merge[`${object.dataset.name}_y_top`];
+  flag = 0;
+
+  elements.forEach(element => {
+    if (element === object || element.classList.contains('block') == false || flag == 1){
+      return;
+    }
+
+    ccoord_cur_element = element.getBoundingClientRect();
+    cur_element_bottom_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_bottom`];
+    cur_element_bottom_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_bottom`];
+    cur_element_top_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_top`];
+    cur_element_top_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_top`];
+
+    const check_top = Math.sqrt((obj_x_top - cur_element_bottom_x) ** 2 + (obj_y_top - cur_element_bottom_y) ** 2);
+    const check_bottom = Math.sqrt((obj_x_bottom - cur_element_top_x) ** 2 + (obj_y_bottom - cur_element_top_y) ** 2);
+
+    if (check_top < 30) {
+      element.appendChild(object);
+
+      const objVstupX = dict_merge[`${object.dataset.name}_vstup_x`];
+      const objVstupY = dict_merge[`${object.dataset.name}_vstup_y`];
+      const elVistupX = dict_merge[`${element.dataset.name}_vistup_x`];
+      const elVistupY = dict_merge[`${element.dataset.name}_vistup_y`];
+
+      Left = elVistupX - objVstupX;
+      Top = elVistupY;
+
+      object.style.left = Left + "px";
+      object.style.top = Top + "px";
+
+      flag = 1;
+    }
+    else if (check_bottom < 30){
+      object.appendChild(element);
+
+      const objVstupX = dict_merge[`${object.dataset.name}_vstup_x`];
+      const objVstupY = dict_merge[`${object.dataset.name}_vstup_y`];
+      const elVistupX = dict_merge[`${element.dataset.name}_vistup_x`];
+      const elVistupY = dict_merge[`${element.dataset.name}_vistup_y`];
+
+      Left = objVstupX - elVistupX;
+      Top = objVstupY - elVistupY;
+
+      object.style.left = Left + "px";
+      object.style.top = Top + "px";
+
+      flag = 1;
+    }
+  });
+}
+
 function move_object(idd) {
   const object = document.getElementById(idd);
-  const zone = document.getElementById("program-sector-id");
+  const zone = document.getElementById(current_cycle_step.at(-1));
 
   object.onmousedown = function(event) {
-    rect_zone = zone.getBoundingClientRect();
-    rect_obj = object.getBoundingClientRect();
+    event.stopPropagation();
 
-    shiftX = event.clientX - rect_obj.left;
-    shiftY = event.clientY - rect_obj.top;
+    if (object.parentElement && object.parentElement.classList.contains('block')) {
+        const rect = object.getBoundingClientRect();
+        zone.appendChild(object);
+
+        const zoneRect = zone.getBoundingClientRect();
+        object.style.left = (rect.left - zoneRect.left) + 'px';
+        object.style.top = (rect.top - zoneRect.top) + 'px';
+    }
+
+    const rect_zone = zone.getBoundingClientRect();
+    const rect_obj = object.getBoundingClientRect();
+
+    const shiftX = event.clientX - rect_obj.left;
+    const shiftY = event.clientY - rect_obj.top;
 
     function moveAt(pageX, pageY) {
       let left = pageX - rect_zone.left - shiftX;
@@ -35,6 +107,7 @@ function move_object(idd) {
     document.addEventListener('mouseup', function onMouseUp() {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+      merge(idd);
     });
   };
 
@@ -48,6 +121,9 @@ function create_begin(){
 
   begin_block.id = `${count}`;
   begin_block.style.position = "absolute";
+  begin_block.classList.add("block");
+  begin_block.dataset.name = "begin";
+
   begin_block.innerHTML = ` <img src="program_sector_img/begin.svg"
   style="width: 320px; height: auto">
   
@@ -81,6 +157,9 @@ function create_veriable(){
 
   variable_block.id = `${count}`;
   variable_block.style.position = "absolute";
+  variable_block.classList.add("block");
+  variable_block.dataset.name = "variable-create";
+
   variable_block.innerHTML = ` <img src="program_sector_img/declaring-variable.svg"
   width="150"
   height="27"
@@ -119,6 +198,9 @@ function create_veriable_edit() {
 
   variable_edit_block.id = `${count}`;
   variable_edit_block.style.position = "absolute";
+  variable_edit_block.classList.add("block");
+  variable_edit_block.dataset.name = "variable-edit";
+
   variable_edit_block.innerHTML = ` <img src="program_sector_img/variable-edit.svg"
   style="width: 500px; height: auto">
   
@@ -167,9 +249,11 @@ function create_if_else(){
   if_else_block_true.classList.add("hide");
   if_else_block_false.id = `false${local_if_id_false}`;
   if_else_block_false.classList.add("hide");
-
   if_else_block.id = `${count}`;
+  if_else_block.classList.add("block");
+
   if_else_block.style.position = "absolute";
+  if_else_block.dataset.name = "if-else";
 
   if_else_block_true.innerHTML = `<button 
   class="button"
@@ -186,13 +270,13 @@ function create_if_else(){
   </button>"`
 
   if_else_block.innerHTML = ` <img src="program_sector_img/if-else.svg"
-  style="width: 450px; height: auto">
+  style="width: 250px; height: auto">
   
   <button type="button"
   class="button"
   alt=""
   id = "delete${count}"
-  style="left: 300px; bottom: 90px; height: 21px">
+  style="left: 200px; bottom: 140px; height: 21px">
   X
   </button>
 
@@ -200,7 +284,7 @@ function create_if_else(){
   class="button"
   alt=""
   id = "if-true${count_if_true}"
-  style="left: 85px; bottom: 130px; height: 21px">
+  style="left: 15px; bottom: 115px; height: 21px">
   Изменить
   </button>
 
@@ -208,7 +292,7 @@ function create_if_else(){
   class="button"
   alt=""
   id = "if-false${count_if_false}"
-  style="left: 190px; bottom: 58px; height: 21px">
+  style="left: 130px; bottom: 40px; height: 21px">
   Изменить
   </button>`;
 
@@ -275,9 +359,11 @@ function create_while(){
 
   while_change_zone.id = `while${local_while}`;
   while_change_zone.classList.add("hide");
-
   while_block.id = `${count}`;
+  while_block.classList.add("block");
+
   while_block.style.position = "absolute";
+  while_block.dataset.name = "while";
 
   while_change_zone.innerHTML = `<button 
   class="button"
@@ -287,13 +373,13 @@ function create_while(){
   </button>"`
 
   while_block.innerHTML = ` <img src="program_sector_img/while.svg"
-  style="width: 500px; height: auto">
+  style="width: 300px; height: auto; position: absolute">
   
   <button type="button"
   class="button"
   alt=""
   id = "delete${count}"
-  style="left: 320px; bottom: 110px; height: 21px">
+  style="left: 250px; top: 75px; height: 21px; position: absolute">
   X
   </button>
 
@@ -301,7 +387,7 @@ function create_while(){
   class="button"
   alt=""
   id = "togler_in${local_while}"
-  style="left: 140px; bottom: 80px; height: 40px; width: 160px">
+  style="left: 60px; top: 85px; height: 50px; width: 160px; position: absolute">
   Изменить
   </button>`
 
@@ -311,8 +397,14 @@ function create_while(){
   move_object(while_block.id);
   
   let changeBtn = document.querySelector(`#togler_in${local_while}`);
+  let deleteBtn = while_block.querySelector(`#delete${count}`);
+  let backBtn = document.getElementById(`togler_out${local_while}`);
 
   changeBtn.onmousedown = function(event) {
+    event.stopPropagation();
+  }
+
+  deleteBtn.onmousedown = function(event) {
     event.stopPropagation();
   }
 
@@ -321,9 +413,6 @@ function create_while(){
     current_cycle_step.push(`while${local_while}`);
     document.getElementById(`while${local_while}`).classList.remove("hide");
   }
-
-  let deleteBtn = while_block.querySelector(`#delete${count}`);
-  let backBtn = document.getElementById(`togler_out${local_while}`);
 
   backBtn.onclick = function(event) {
     document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
@@ -345,6 +434,8 @@ function create_operation() {
 
   create_operation_block.id = `${count}`;
   create_operation_block.style.position = "absolute";
+  create_operation_block.classList.add("block");
+  create_operation_block.dataset.name = "operation";
 
   create_operation_block.innerHTML = ` <img src="program_sector_img/operation.svg"
   style="width: 240px; height: auto">
@@ -391,11 +482,50 @@ function create_operation() {
   count+=1;
 }
 
+function create_output() {
+  let create_output_block = document.createElement("div");
+
+  create_output_block.id = `${count}`;
+  create_output_block.style.position = "absolute";
+  create_output_block.classList.add("block");
+  create_output_block.dataset.name = "output";
+
+  create_output_block.innerHTML = ` <img src="program_sector_img/output_zero.svg"
+  style="width: 210px; height: auto">
+
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="right: 60px; bottom: 38px; width:75px; height: 55px">
+  
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="right: 2px; bottom: 5px; height: 21px">
+  X
+  </button>`;
+
+  document.getElementById(current_cycle_step.at(-1)).appendChild(create_output_block);
+  move_object(create_output_block.id);
+  
+  let deleteBtn = create_output_block.querySelector(`#delete${count}`);
+
+  deleteBtn.onclick = function(event) {
+    create_output_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+}
+
 function create_end() {
   let create_end_block = document.createElement("div");
 
   create_end_block.id = `${count}`;
   create_end_block.style.position = "absolute";
+  create_end_block.classList.add("block");
+  create_end_block.dataset.name = "end";
 
   create_end_block.innerHTML = ` <img src="program_sector_img/end.svg"
   style="width: 210px; height: auto">
@@ -427,4 +557,5 @@ document.getElementById("create-variable-edit").addEventListener("click", create
 document.getElementById("create-if-else").addEventListener("click", create_if_else);
 document.getElementById("create-while").addEventListener("click", create_while);
 document.getElementById("create-operation").addEventListener("click", create_operation);
+document.getElementById("create-output").addEventListener("click", create_output);
 document.getElementById("create-end").addEventListener("click", create_end);
