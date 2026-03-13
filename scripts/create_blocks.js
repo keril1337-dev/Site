@@ -4,33 +4,56 @@ let count_if_false = 0;
 let count_while = 0;
 let current_cycle_step = ["program-sector-without-cycles-id"];
 
+function check_childrens(object){
+  if (object.children.length == 0){
+    return;
+  }
+  else {
+    const elements = Array.from(object.children);
+    const zone = document.getElementById(current_cycle_step.at(-1));
+    elements.forEach(element => {
+      if (element.classList.contains("block")){
+        const rect_zone = zone.getBoundingClientRect();
+        const rect_element= element.getBoundingClientRect();
+
+        zone.appendChild(element);
+
+        element.style.left = (rect_element.left - rect_zone.left) +  "px";
+        element.style.top = (rect_element.top - rect_zone.top) + "px";
+      }
+    });
+  }
+}
+
 function merge(idd){
   const object = document.getElementById(idd);
   const current_sector = document.querySelector(`#${current_cycle_step.at(-1)}`);
   const elements = current_sector.querySelectorAll(".block");
   const coord = object.getBoundingClientRect();
 
-  obj_x_bottom = coord.left + dict_merge[`${object.dataset.name}_x_bottom`];
-  obj_y_bottom = coord.top + dict_merge[`${object.dataset.name}_y_bottom`];
-  obj_x_top = coord.left + dict_merge[`${object.dataset.name}_x_top`];
-  obj_y_top = coord.top + dict_merge[`${object.dataset.name}_y_top`];
-  flag = 0;
+  const obj_x_bottom = coord.left + dict_merge[`${object.dataset.name}_x_bottom`];
+  const obj_y_bottom = coord.top + dict_merge[`${object.dataset.name}_y_bottom`];
+  const obj_x_top = coord.left + dict_merge[`${object.dataset.name}_x_top`];
+  const obj_y_top = coord.top + dict_merge[`${object.dataset.name}_y_top`];
+  
+  let flag = 0;
 
   elements.forEach(element => {
     if (element === object || element.classList.contains('block') == false || flag == 1){
       return;
     }
 
-    coord_cur_element = element.getBoundingClientRect();
-    cur_element_bottom_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_bottom`];
-    cur_element_bottom_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_bottom`];
-    cur_element_top_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_top`];
-    cur_element_top_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_top`];
+    const coord_cur_element = element.getBoundingClientRect();
+
+    const cur_element_bottom_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_bottom`];
+    const cur_element_bottom_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_bottom`];
+    const cur_element_top_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_top`];
+    const cur_element_top_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_top`];
 
     const check_top = Math.sqrt((obj_x_top - cur_element_bottom_x) ** 2 + (obj_y_top - cur_element_bottom_y) ** 2);
     const check_bottom = Math.sqrt((obj_x_bottom - cur_element_top_x) ** 2 + (obj_y_bottom - cur_element_top_y) ** 2);
 
-    if (check_top < 30) {
+    if (check_top < 35) {
       element.appendChild(object);
 
       const objVstupX = dict_merge[`${object.dataset.name}_vstup_x`];
@@ -38,27 +61,27 @@ function merge(idd){
       const elVistupX = dict_merge[`${element.dataset.name}_vistup_x`];
       const elVistupY = dict_merge[`${element.dataset.name}_vistup_y`];
 
-      Left = elVistupX - objVstupX;
-      Top = elVistupY;
+      const Left = elVistupX - objVstupX;
+      const Top = elVistupY;
 
       object.style.left = Left + "px";
       object.style.top = Top + "px";
 
       flag = 1;
     }
-    else if (check_bottom < 30){
+    else if (check_bottom < 35){
       object.appendChild(element);
 
-      const objVstupX = dict_merge[`${object.dataset.name}_vstup_x`];
-      const objVstupY = dict_merge[`${object.dataset.name}_vstup_y`];
-      const elVistupX = dict_merge[`${element.dataset.name}_vistup_x`];
-      const elVistupY = dict_merge[`${element.dataset.name}_vistup_y`]; elvistu
+      const objVstupX = dict_merge[`${object.dataset.name}_vistup_x`];
+      const objVstupY = dict_merge[`${object.dataset.name}_vistup_y`];
+      const elVistupX = dict_merge[`${element.dataset.name}_vstup_x`];
+      const elVistupY = dict_merge[`${element.dataset.name}_vstup_y`];
 
-      Left = objVstupX - elVistupX;
-      Top = objVstupY - elVistupY;
+      const Left = objVstupX - elVistupX;
+      const Top = objVstupY;
 
-      object.style.left = Left + "px";
-      object.style.top = Top + "px";
+      element.style.left = Left + "px";
+      element.style.top = Top + "px";
 
       flag = 1;
     }
@@ -70,15 +93,21 @@ function move_object(idd) {
   const zone = document.getElementById(current_cycle_step.at(-1));
 
   object.onmousedown = function(event) {
+    if (event.target.tagName === 'INPUT' || 
+      event.target.tagName === 'SELECT' || 
+      event.target.tagName === 'BUTTON') {
+      return;
+    }
+
     event.stopPropagation();
 
-    if (object.parentElement && object.parentElement.classList.contains('block')) {
-        const rect = object.getBoundingClientRect();
+    if (object.parentElement && object.parentElement.classList.contains("block")) {
+        const rect_obj = object.getBoundingClientRect();
         zone.appendChild(object);
 
-        const zoneRect = zone.getBoundingClientRect();
-        object.style.left = (rect.left - zoneRect.left) + 'px';
-        object.style.top = (rect.top - zoneRect.top) + 'px';
+        const zone_rect = zone.getBoundingClientRect();
+        object.style.left = (rect_obj.left - zone_rect.left) + "px";
+        object.style.top = (rect_obj.top - zone_rect.top) + "px";
     }
 
     const rect_zone = zone.getBoundingClientRect();
@@ -94,19 +123,19 @@ function move_object(idd) {
       left = Math.max(0, Math.min(left, zone.offsetWidth - object.offsetWidth));
       top = Math.max(0, Math.min(top, zone.offsetHeight - object.offsetHeight));
 
-      object.style.left = left + 'px';
-      object.style.top = top + 'px';
+      object.style.left = left + "px";
+      object.style.top = top + "px";
     }
 
     function onMouseMove(event) {
       moveAt(event.clientX, event.clientY);
     }
 
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener("mousemove", onMouseMove);
 
-    document.addEventListener('mouseup', function onMouseUp() {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+    document.addEventListener("mouseup", function onMouseUp() {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
       merge(idd);
     });
   };
@@ -117,7 +146,7 @@ function move_object(idd) {
 };
 
 function create_begin(){
-  let begin_block = document.createElement("div");
+  const begin_block = document.createElement("div");
 
   begin_block.id = `${count}`;
   begin_block.style.position = "absolute";
@@ -141,9 +170,10 @@ function create_begin(){
   document.getElementById("create-begin").disabled = true;
   move_object(begin_block.id);
   
-  let deleteBtn = begin_block.querySelector(`#delete${count}`);
+  const deleteBtn = begin_block.querySelector(`#delete${count}`);
 
   deleteBtn.onclick = function(event) {
+    check_childrens(begin_block);
     begin_block.remove();
     document.getElementById("create-begin").disabled = false;
   };
@@ -153,7 +183,7 @@ function create_begin(){
 }
 
 function create_veriable(){
-  let variable_block = document.createElement("div");
+  const variable_block = document.createElement("div");
 
   variable_block.id = `${count}`;
   variable_block.style.position = "absolute";
@@ -183,9 +213,10 @@ function create_veriable(){
   document.getElementById(current_cycle_step.at(-1)).appendChild(variable_block);
   move_object(variable_block.id);
   
-  let deleteBtn = variable_block.querySelector(`#delete${count}`);
+  const deleteBtn = variable_block.querySelector(`#delete${count}`);
 
   deleteBtn.onclick = function(event) {
+    check_childrens(variable_block);
     variable_block.remove();
   };
 
@@ -194,7 +225,7 @@ function create_veriable(){
 }
 
 function create_veriable_edit() {
-  let variable_edit_block = document.createElement("div");
+  const variable_edit_block = document.createElement("div");
 
   variable_edit_block.id = `${count}`;
   variable_edit_block.style.position = "absolute";
@@ -227,9 +258,10 @@ function create_veriable_edit() {
   document.getElementById(current_cycle_step.at(-1)).appendChild(variable_edit_block);
   move_object(variable_edit_block.id);
   
-  let deleteBtn = variable_edit_block.querySelector(`#delete${count}`);
+  const deleteBtn = variable_edit_block.querySelector(`#delete${count}`);
   
   deleteBtn.onclick = function(event) {
+    check_childrens(variable_edit_block);
     variable_edit_block.remove();
   };
 
@@ -238,12 +270,12 @@ function create_veriable_edit() {
 }
 
 function create_if_else(){
-  let local_if_id_true = count_if_true;
-  let local_if_id_false = count_if_false;
+  const local_if_id_true = count_if_true;
+  const local_if_id_false = count_if_false;
   
-  let if_else_block = document.createElement("div");
-  let if_else_block_true = document.createElement("div");
-  let if_else_block_false = document.createElement("div");
+  const if_else_block = document.createElement("div");
+  const if_else_block_true = document.createElement("div");
+  const if_else_block_false = document.createElement("div");
 
   if_else_block_true.id = `true${local_if_id_true}`;
   if_else_block_true.classList.add("hide");
@@ -302,8 +334,8 @@ function create_if_else(){
 
   move_object(if_else_block.id);
   
-  let ifTrueBtn = document.querySelector(`#if-true${count_if_true}`);
-  let ifFalseBtn = document.querySelector(`#if-false${count_if_false}`);
+  const ifTrueBtn = document.querySelector(`#if-true${count_if_true}`);
+  const ifFalseBtn = document.querySelector(`#if-false${count_if_false}`);
 
   ifTrueBtn.onmousedown = function(event) {
     event.stopPropagation();
@@ -325,9 +357,9 @@ function create_if_else(){
     document.getElementById(`false${local_if_id_false}`).classList.remove("hide");
   }
 
-  let deleteBtn = if_else_block.querySelector(`#delete${count}`);
-  let backTrueBtn = document.getElementById(`togler_t${local_if_id_true}`);
-  let backFalseBtn = document.getElementById(`togler_f${local_if_id_false}`);
+  const deleteBtn = if_else_block.querySelector(`#delete${count}`);
+  const backTrueBtn = document.getElementById(`togler_t${local_if_id_true}`);
+  const backFalseBtn = document.getElementById(`togler_f${local_if_id_false}`);
   
   backTrueBtn.onclick = function(event) {
     document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
@@ -342,20 +374,21 @@ function create_if_else(){
   }
 
   deleteBtn.onclick = function(event) {
+    check_childrens(if_else_block);
     if_else_block.remove();
   };
 
   console.log(count);
-  count+=1;
-  count_if_true+=1;
-  count_if_false+=1;
+  count += 1;
+  count_if_true += 1;
+  count_if_false += 1;
 }
 
 function create_while(){
-  let local_while = count_while;
+  const local_while = count_while;
   
-  let while_block = document.createElement("div");
-  let while_change_zone = document.createElement("div");
+  const while_block = document.createElement("div");
+  const while_change_zone = document.createElement("div");
 
   while_change_zone.id = `while${local_while}`;
   while_change_zone.classList.add("hide");
@@ -396,9 +429,9 @@ function create_while(){
 
   move_object(while_block.id);
   
-  let changeBtn = document.querySelector(`#togler_in${local_while}`);
-  let deleteBtn = while_block.querySelector(`#delete${count}`);
-  let backBtn = document.getElementById(`togler_out${local_while}`);
+  const changeBtn = document.querySelector(`#togler_in${local_while}`);
+  const deleteBtn = while_block.querySelector(`#delete${count}`);
+  const backBtn = document.getElementById(`togler_out${local_while}`);
 
   changeBtn.onmousedown = function(event) {
     event.stopPropagation();
@@ -421,16 +454,17 @@ function create_while(){
   }
 
   deleteBtn.onclick = function(event) {
+    check_childrens(while_block);
     while_block.remove();
   };
 
   console.log(count);
-  count+=1;
-  count_while+=1;
+  count += 1;
+  count_while += 1;
 }
 
 function create_operation() {
-  let create_operation_block = document.createElement("div");
+  const create_operation_block = document.createElement("div");
 
   create_operation_block.id = `${count}`;
   create_operation_block.style.position = "absolute";
@@ -472,9 +506,10 @@ function create_operation() {
   document.getElementById(current_cycle_step.at(-1)).appendChild(create_operation_block);
   move_object(create_operation_block.id);
   
-  let deleteBtn = create_operation_block.querySelector(`#delete${count}`);
+  const deleteBtn = create_operation_block.querySelector(`#delete${count}`);
 
   deleteBtn.onclick = function(event) {
+    check_childrens(create_operation);
     create_operation_block.remove();
   };
 
@@ -483,7 +518,7 @@ function create_operation() {
 }
 
 function create_output() {
-  let create_output_block = document.createElement("div");
+  const create_output_block = document.createElement("div");
 
   create_output_block.id = `${count}`;
   create_output_block.style.position = "absolute";
@@ -509,9 +544,10 @@ function create_output() {
   document.getElementById(current_cycle_step.at(-1)).appendChild(create_output_block);
   move_object(create_output_block.id);
   
-  let deleteBtn = create_output_block.querySelector(`#delete${count}`);
+  const deleteBtn = create_output_block.querySelector(`#delete${count}`);
 
   deleteBtn.onclick = function(event) {
+    check_childrens(create_output);
     create_output_block.remove();
   };
 
@@ -520,7 +556,7 @@ function create_output() {
 }
 
 function create_end() {
-  let create_end_block = document.createElement("div");
+  const create_end_block = document.createElement("div");
 
   create_end_block.id = `${count}`;
   create_end_block.style.position = "absolute";
@@ -541,9 +577,10 @@ function create_end() {
   document.getElementById(current_cycle_step.at(-1)).appendChild(create_end_block);
   move_object(create_end_block.id);
   
-  let deleteBtn = create_end_block.querySelector(`#delete${count}`);
+  const deleteBtn = create_end_block.querySelector(`#delete${count}`);
 
   deleteBtn.onclick = function(event) {
+    check_childrens(create_end_block);
     create_end_block.remove();
   };
 
