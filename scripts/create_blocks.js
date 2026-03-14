@@ -2,7 +2,404 @@ let count = 0;
 let count_if_true = 0;
 let count_if_false = 0;
 let count_while = 0;
+let count_for = 0;
 let current_cycle_step = ["program-sector-without-cycles-id"];
+let size_coef = 1;
+
+class ScratchInterpreter {
+  constructor() {
+    this.vars = new Map();
+    this.arrays = new Map();
+    this.console = document.getElementById("output-console");
+    this.max_iterations = 5000;
+
+    this.priority = {
+      '||': 1, '&&': 2,
+      '==': 3, '!=': 3,
+      '>': 4, '<': 4, '>=': 4, '<=': 4,
+      '+': 5, '-': 5,
+      '*': 6, '/': 6, '%': 6,
+      '!': 7, 'index': 8 
+    };
+  }
+
+  tokenize(str) {
+    const tokens = [];
+    let i = 0;
+    function isWhitespace(c) {
+      return (c === " " || c === "\n" || c === "\t" || c === "\r");
+    }
+
+    function isDigit(c){
+      return (c >= "0" && c <= "9");
+    }
+
+    function isLetter(c){
+      return (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") || c === "_";
+    }
+
+    function isAlphaNumeric(c) {
+      return isLetter(c) || isDigit(c);
+    }
+
+    while (i < str.length) {
+      let char = str[i];
+
+      if (isWhitespace(char)) { 
+        i += 1; 
+        continue; 
+      }
+
+      if (isDigit(char)) {
+        let num = "";
+
+        while (i < str.length && isDigit(str[i])) {
+          num += str[i];
+          i += 1;
+        }
+
+        tokens.push({ type: "NUM", value: parseInt(num) });
+        continue;
+      }
+
+      if (isLetter(char)) {
+        let name = "";
+
+        while (i < str.length && isAlphaNumeric(str[i])) {
+          name += str[i];
+          i += 1;
+        }
+
+        tokens.push({ type: "VAR", value: name });
+        continue;
+      }
+
+      const simpleOps = ["+", "-", "*", "/", "%", "(", ")", "[", "]"];
+      if (simpleOps.includes(char)) {
+        tokens.push({ type: "OP", value: char });
+        i +=  1;
+        continue;
+      }
+
+      const complexOps = ["==", "!=", ">=", "<=", "&&", "||"];
+      let doubleChar = char + (str[i + 1] || "");
+            
+      if (complexOps.includes(doubleChar)) {
+        tokens.push({ type: "OP", value: doubleChar });
+          i += 2;
+        } 
+        else if ([">", "<", "!"].includes(char)) {
+          tokens.push({ type: 'OP', value: char });
+          i += 1;
+        } 
+        else { 
+          i  += 1; 
+        }
+      }
+    return tokens;
+  }
+
+  shuntingYard(tokens) {
+    const output = [];
+    const stack = [];
+    tokens.forEach((token) => {
+      if (token.type === 'NUM' || token.type === 'VAR') {
+        output.push(token);
+      } 
+      else if (token.value === '(' || token.value === '[') {
+        stack.push(token);
+      } 
+      else if (token.value === ')') {
+        while (stack.length && stack[stack.length - 1].value !== '('){
+          output.push(stack.pop());
+        }
+        stack.pop();
+        
+      } 
+      else if (token.value === ']') {
+        while (stack.length && stack[stack.length - 1].value !== '[') {
+          output.push(stack.pop());
+        }
+        stack.pop();
+        output.push({ type: 'OP', value: 'index' });
+        
+      } 
+      else {
+        while (stack.length && this.priority[stack[stack.length - 1].value] >= this.priority[token.value]) {
+          output.push(stack.pop());
+        }
+        stack.push(token);
+      }
+    });
+
+    while (stack.length) output.push(stack.pop());
+    return output;
+  }
+
+  evaluate(str) {
+    if (!str || str.trim() === ""){
+      return 0;
+    }
+
+    const tokens = this.tokenize(str);
+    const rpn = this.shuntingYard(tokens);
+    const stack = [];
+
+    rpn.forEach(token => {
+      if (token.type === 'NUM') {
+        stack.push(token.value);
+      } 
+      else if (token.type === 'VAR') {
+        stack.push(token.value); 
+      } 
+      else {
+        if (token.value === '!') {
+          let v = this.getVal(stack.pop());
+          stack.push(v ? 0 : 1);
+        } 
+        else if (token.value === 'index') {
+          let idx = this.getVal(stack.pop());
+          let name = stack.pop(); 
+          if (!this.arrays.has(name)) {
+            throw new Error(`Массив "${name}" не найден`);
+          }
+          let val = this.arrays.get(name)[idx];
+          stack.push(val !== undefined ? val : 0);
+        } 
+        else {
+          let b = this.getVal(stack.pop());
+          let a = this.getVal(stack.pop());
+          switch (token.value) {
+            case '+': stack.push(a + b); break;
+            case '-': stack.push(a - b); break;
+            case '*': stack.push(a * b); break;
+            case '/': stack.push(b === 0 ? 0 : Math.trunc(a / b)); break;
+            case '%': stack.push(b === 0 ? 0 : a % b); break;
+            case '==': stack.push(a === b ? 1 : 0); break;
+            case '!=': stack.push(a !== b ? 1 : 0); break;
+            case '>': stack.push(a > b ? 1 : 0); break;
+            case '<': stack.push(a < b ? 1 : 0); break;
+            case '>=': stack.push(a >= b ? 1 : 0); break;
+            case '<=': stack.push(a <= b ? 1 : 0); break;
+            case '&&': stack.push((a && b) ? 1 : 0); break;
+            case '||': stack.push((a || b) ? 1 : 0); break;
+          }
+        }
+      }
+    });
+    return this.getVal(stack[0]);
+  }
+
+  getVal(v) {
+    if (typeof v === "string") {
+      if (this.vars.has(v)){
+        return this.vars.get(v);
+      }
+      throw new Error(`Переменная "${v}" не определена`);
+    }
+    return v;
+  }
+
+  async run() {
+    this.console.innerHTML = "<div>Запуск</div>";
+    this.vars.clear();
+    this.arrays.clear();
+
+    try {
+      document.querySelectorAll('.block').forEach(b => {
+        const inp = b.querySelector('input[name="name"]');
+        if (!inp) {
+          return;
+        }
+        const name = inp.value.trim();
+        if (!name){ 
+          return;
+        }
+        if (b.dataset.name === 'variable-create') {
+          this.vars.set(name, 0);
+        }
+        if (b.dataset.name === 'array-create') {
+          this.arrays.set(name, []);
+        }
+      });
+
+      const begin = Array.from(document.querySelectorAll(".block"));
+      let begin_true = null;
+
+      begin.forEach(element =>{
+        if (element.dataset.name === "begin"){
+          begin_true = document.getElementById(element.id);
+        }
+      });
+      if (!begin_true){
+        throw new Error("Программа должна начинаться с begin");
+      } 
+
+      let end_found = false;
+      let check = begin_true.querySelectorAll(".block");
+      let flag = 1;
+      let first_block = null;
+
+      check.forEach(element => {
+        if (flag ==  1){
+          first_block = element;
+          flag = 0;
+        }
+        if (element.dataset.name === "end"){
+          end_found = true;
+        }
+      });
+
+      if (!end_found) {
+        throw new Error("Программа должна заканчиваться блоком 'end'");
+      }
+      
+      if (first_block){ 
+        await this.executeChain(first_block);
+      }
+      this.log("Выполнение завершено.", "#888");
+    } 
+    catch (e) {
+      this.log(`[ОШИБКА]: ${e.message}`, "#ff4d4d");
+    }
+  }
+
+  async executeChain(block) {
+    while (block && block.dataset.name !== 'end') {
+      const inputs = block.querySelectorAll('input');
+      const type = block.dataset.name;
+
+      if (type === 'variable-edit') {
+        const nameInput = inputs[0].value.trim();
+        const val = this.evaluate(inputs[1].value);
+                
+        let isArrayAccess = false;
+        let arrName = "";
+        let idxStr = "";
+
+        if (nameInput.endsWith(']')) {
+          const openBracketIdx = nameInput.indexOf('[');
+          if (openBracketIdx !== -1) {
+            isArrayAccess = true;
+            arrName = nameInput.substring(0, openBracketIdx).trim();
+            idxStr = nameInput.substring(openBracketIdx + 1, nameInput.length - 1).trim();
+          }
+        }
+                
+        if (isArrayAccess) {
+          if (!this.arrays.has(arrName)) {
+            throw new Error(`Массив "${arrName}" не найден. Убедитесь, что создали его `);
+          }
+                    
+          const idx = this.evaluate(idxStr);
+          const arr = this.arrays.get(arrName);
+                      
+          if (idx < 0 || idx >= arr.length) {
+            throw new Error(`Индекс ${idx} вне границ массива ${arrName}`);
+          }
+                      
+          arr[idx] = val;
+        } 
+        else {
+          if (!this.vars.has(nameInput)) {
+            throw new Error(`Переменная "${nameInput}" не заведена`);
+          }
+          this.vars.set(nameInput, val);
+        }
+      }
+      else if (type === 'output') {
+        this.log(`> ${this.evaluate(inputs[0].value)}`);
+      } 
+      else if (type === 'change-array') {
+        const name = inputs[0].value.trim();
+        const action = block.querySelector('select').value;
+        const val = this.evaluate(inputs[1].value);
+                
+        if (!this.arrays.has(name)){
+          throw new Error(`Массив "${name}" не заведен`);
+        }
+                
+        const arr = this.arrays.get(name);
+        if (action.includes("Добавить")) {
+          arr.push(val);
+        } 
+        else {
+          if (val >= 0 && val < arr.length) arr.splice(val, 1);
+          else{ 
+            throw new Error(`Индекс ${val} вне границ массива ${name}`);
+          }
+        }
+    } 
+    else if (type === 'if-else') {
+      const cond = this.evaluate(inputs[0].value);
+      const trueId = block.querySelector('[id^="if-true"]').id.replace('if-true', 'true');
+      const falseId = block.querySelector('[id^="if-false"]').id.replace('if-false', 'false');
+      const container = document.getElementById(cond ? trueId : falseId);
+      const inner = Array.from(container.children).find(c => c.classList.contains('block'));
+      if (inner){
+        await this.executeChain(inner);
+      }
+    } 
+    else if (type === 'while') {
+      const condStr = inputs[0].value;
+      const contId = block.querySelector('[id^="togler_in_"]').id.replace('togler_in_', '');
+      const container = document.getElementById(contId);
+      const inner = Array.from(container.children).find(c => c.classList.contains('block'));
+
+      const executeWhile = async (safety = 0) => {
+        if (!this.evaluate(condStr)){ 
+          return;
+        }
+        if (safety > this.max_iterations){
+          throw new Error("Бесконечный цикл");
+        }
+                    
+        if (inner) {
+          await this.executeChain(inner);
+        }
+                    
+        await executeWhile(safety + 1);
+      };
+
+      await executeWhile(0);
+    }
+    else if (type === 'for') {
+      const counter = inputs[0].value.trim();
+      const limit = this.evaluate(inputs[1].value);
+      const contId = block.querySelector('[id^="togler_in_"]').id.replace('togler_in_', '');
+      const container = document.getElementById(contId);
+      const inner = Array.from(container.children).find(c => c.classList.contains('block'));
+
+      const executeFor = async (i) => {
+        if (i >= limit) return; 
+                    
+        this.vars.set(counter, i);
+          if (inner) {
+            await this.executeChain(inner);
+          }
+                    
+        await executeFor(i + 1);
+      };
+
+      await executeFor(0);
+    }
+
+    block = Array.from(block.children).find(c => c.classList.contains('block'));
+    }
+  }
+
+  log(msg, color = "#00ff00") {
+    const div = document.createElement("div");
+    div.style.color = color;
+    div.textContent = msg;
+    this.console.appendChild(div);
+    this.console.scrollTop = this.console.scrollHeight;
+  }
+}
+
+document.getElementById('run-btn').addEventListener('click', () => {
+    new ScratchInterpreter().run();
+});
 
 function check_childrens(object){
   if (object.children.length == 0){
@@ -31,10 +428,10 @@ function merge(idd){
   const elements = current_sector.querySelectorAll(".block");
   const coord = object.getBoundingClientRect();
 
-  const obj_x_bottom = coord.left + dict_merge[`${object.dataset.name}_x_bottom`];
-  const obj_y_bottom = coord.top + dict_merge[`${object.dataset.name}_y_bottom`];
-  const obj_x_top = coord.left + dict_merge[`${object.dataset.name}_x_top`];
-  const obj_y_top = coord.top + dict_merge[`${object.dataset.name}_y_top`];
+  const obj_x_bottom = coord.left * size_coef + dict_merge[`${object.dataset.name}_x_bottom`] * size_coef;
+  const obj_y_bottom = coord.top * size_coef + dict_merge[`${object.dataset.name}_y_bottom`] * size_coef;
+  const obj_x_top = coord.left * size_coef + dict_merge[`${object.dataset.name}_x_top`] * size_coef;
+  const obj_y_top = coord.top * size_coef + dict_merge[`${object.dataset.name}_y_top`] * size_coef;
   
   let flag = 0;
 
@@ -44,16 +441,19 @@ function merge(idd){
     }
 
     const coord_cur_element = element.getBoundingClientRect();
-
-    const cur_element_bottom_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_bottom`];
-    const cur_element_bottom_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_bottom`];
-    const cur_element_top_x = coord_cur_element.left + dict_merge[`${element.dataset.name}_x_top`];
-    const cur_element_top_y = coord_cur_element.top + dict_merge[`${element.dataset.name}_y_top`];
+    const cur_element_bottom_x = coord_cur_element.left * size_coef + dict_merge[`${element.dataset.name}_x_bottom`] * size_coef;
+    const cur_element_bottom_y = coord_cur_element.top * size_coef + dict_merge[`${element.dataset.name}_y_bottom`] * size_coef;
+    const cur_element_top_x = coord_cur_element.left * size_coef + dict_merge[`${element.dataset.name}_x_top`]
+     * size_coef;
+    const cur_element_top_y = coord_cur_element.top * size_coef + dict_merge[`${element.dataset.name}_y_top`]
+     * size_coef;
 
     const check_top = Math.sqrt((obj_x_top - cur_element_bottom_x) ** 2 + (obj_y_top - cur_element_bottom_y) ** 2);
     const check_bottom = Math.sqrt((obj_x_bottom - cur_element_top_x) ** 2 + (obj_y_bottom - cur_element_top_y) ** 2);
 
-    if (check_top < 35) {
+    console.log(`${check_bottom}, ${check_top}, ${window.innerHeight}, ${size_coef}`);
+
+    if (check_top < 35 * size_coef) {
       element.appendChild(object);
 
       const objVstupX = dict_merge[`${object.dataset.name}_vstup_x`];
@@ -61,15 +461,15 @@ function merge(idd){
       const elVistupX = dict_merge[`${element.dataset.name}_vistup_x`];
       const elVistupY = dict_merge[`${element.dataset.name}_vistup_y`];
 
-      const Left = elVistupX - objVstupX;
-      const Top = elVistupY;
+      const Left = (elVistupX - objVstupX) * size_coef;
+      const Top = elVistupY * size_coef;
 
       object.style.left = Left + "px";
       object.style.top = Top + "px";
 
       flag = 1;
     }
-    else if (check_bottom < 35){
+    else if (check_bottom < 35 * size_coef){
       object.appendChild(element);
 
       const objVstupX = dict_merge[`${object.dataset.name}_vistup_x`];
@@ -77,8 +477,8 @@ function merge(idd){
       const elVistupX = dict_merge[`${element.dataset.name}_vstup_x`];
       const elVistupY = dict_merge[`${element.dataset.name}_vstup_y`];
 
-      const Left = objVstupX - elVistupX;
-      const Top = objVstupY;
+      const Left = (objVstupX - elVistupX) * size_coef;
+      const Top = objVstupY * size_coef;
 
       element.style.left = Left + "px";
       element.style.top = Top + "px";
@@ -216,8 +616,48 @@ function create_veriable(){
   const deleteBtn = variable_block.querySelector(`#delete${count}`);
 
   deleteBtn.onclick = function(event) {
-    check_childrens(variable_block);
     variable_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+}
+
+function create_array(){
+  const array_block = document.createElement("div");
+
+  array_block.id = `${count}`;
+  array_block.style.position = "absolute";
+  array_block.classList.add("block");
+  array_block.dataset.name = "array-create";
+
+  array_block.innerHTML = ` <img src="program_sector_img/declaring-variable.svg"
+  width="150"
+  height="27"
+  style="display: block">
+  
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  maxlength="8"
+  size="8"
+  style="right: 50px; bottom: 5px; width: 60px; height: 12px">
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="right: 8px; bottom: 4px; height: 21px">
+  X
+  </button>`;
+
+  document.getElementById(current_cycle_step.at(-1)).appendChild(array_block);
+  move_object(array_block.id);
+  
+  const deleteBtn = array_block.querySelector(`#delete${count}`);
+
+  deleteBtn.onclick = function(event) {
+    array_block.remove();
   };
 
   console.log(count);
@@ -263,6 +703,58 @@ function create_veriable_edit() {
   deleteBtn.onclick = function(event) {
     check_childrens(variable_edit_block);
     variable_edit_block.remove();
+  };
+
+  console.log(count);
+  count+=1;
+}
+
+function create_change_array(){
+  const change_array_block = document.createElement("div");
+
+  change_array_block.id = `${count}`;
+  change_array_block.style.position = "absolute";
+  change_array_block.classList.add("block");
+  change_array_block.dataset.name = "change-array";
+
+  change_array_block.innerHTML = ` <img src="program_sector_img/change_array_zero.svg"
+  style="width: 300px; height: auto">
+  
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  maxlength="8"
+  size="8"
+  style="right: 185px; bottom: 82px; width: 75px; height: 25px">
+
+  <select name="choice" id="change-array-select"
+  class="option-select"
+  style="right: 30px; bottom: 132px; width: 160px">
+    <option value="Удалить по индексу">Удалить по индексу</option>
+    <option value="Добавить элемент">Добавить элемент</option>
+  </select>
+
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="right: 35px; bottom: 82px; width: 105px; height: 25px">
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "delete${count}"
+  style="right: 8px; bottom: 155px; height: 21px">
+  X
+  </button>`;
+
+  document.getElementById(current_cycle_step.at(-1)).appendChild(change_array_block);
+  move_object(change_array_block.id);
+  
+  const deleteBtn = change_array_block.querySelector(`#delete${count}`);
+  
+  deleteBtn.onclick = function(event) {
+    check_childrens(change_array_block);
+    change_array_block.remove();
   };
 
   console.log(count);
@@ -319,6 +811,11 @@ function create_if_else(){
   style="left: 15px; bottom: 115px; height: 21px">
   Изменить
   </button>
+
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="right: 65px; bottom: 72px; width: 105px; height: 25px">
 
   <button type="button"
   class="button"
@@ -400,10 +897,10 @@ function create_while(){
 
   while_change_zone.innerHTML = `<button 
   class="button"
-  id = "togler_out${local_while}"
+  id = "togler_out_while${local_while}"
   type="button">
   Х
-  </button>"`
+  </button>`
 
   while_block.innerHTML = ` <img src="program_sector_img/while.svg"
   style="width: 300px; height: auto; position: absolute">
@@ -416,11 +913,16 @@ function create_while(){
   X
   </button>
 
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="left: 85px; top: 80px; width: 105px; height: 25px">
+
   <button type="button"
   class="button"
   alt=""
-  id = "togler_in${local_while}"
-  style="left: 60px; top: 85px; height: 50px; width: 160px; position: absolute">
+  id = "togler_in_while${local_while}"
+  style="left: 60px; top: 115px; height: 30px; width: 160px; position: absolute">
   Изменить
   </button>`
 
@@ -429,9 +931,9 @@ function create_while(){
 
   move_object(while_block.id);
   
-  const changeBtn = document.querySelector(`#togler_in${local_while}`);
+  const changeBtn = document.querySelector(`#togler_in_while${local_while}`);
   const deleteBtn = while_block.querySelector(`#delete${count}`);
-  const backBtn = document.getElementById(`togler_out${local_while}`);
+  const backBtn = document.getElementById(`togler_out_while${local_while}`);
 
   changeBtn.onmousedown = function(event) {
     event.stopPropagation();
@@ -463,59 +965,95 @@ function create_while(){
   count_while += 1;
 }
 
-function create_operation() {
-  const create_operation_block = document.createElement("div");
-
-  create_operation_block.id = `${count}`;
-  create_operation_block.style.position = "absolute";
-  create_operation_block.classList.add("block");
-  create_operation_block.dataset.name = "operation";
-
-  create_operation_block.innerHTML = ` <img src="program_sector_img/operation.svg"
-  style="width: 240px; height: auto">
+function create_for() {
+  const local_for = count_for;
   
-  <input type="text"
-  class="block-input" 
-  name="name" 
-  maxlength="8"
-  size="8"
-  style="right: 127px; bottom: 38px; width: 55px; height: 25px">
+  const for_block = document.createElement("div");
+  const for_change_zone = document.createElement("div");
+
+  for_change_zone.id = `for${local_for}`;
+  for_change_zone.classList.add("hide");
+  for_block.id = `${count}`;
+  for_block.classList.add("block");
+
+  for_block.style.position = "absolute";
+  for_block.dataset.name = "for";
+
+  for_change_zone.innerHTML = `<button 
+  class="button"
+  id = "togler_out_for${local_for}"
+  type="button">
+  Х
+  </button>`
+
+  for_block.innerHTML = ` <img src="program_sector_img/for.svg"
+  style="width: 300px; height: auto; position: absolute">
   
-  <select name="operations" id="operations${count}"
-  style="position: absolute; left: 110px; top: 40px">
-    <option value="=="> == </option>
-    <option value="=="> < </option>
-    <option value="=="> > </option>
-    <option value="=="> <= </option>
-    <option value="=="> >= </option>
-  </select>
-
-  <input type="text"
-  class="block-input" 
-  name="name" 
-  style="right: 25px; bottom: 38px; width: 55px; height: 25px">
-
   <button type="button"
   class="button"
   alt=""
   id = "delete${count}"
-  style="right: 8px; bottom: 85px; height: 21px">
+  style="left: 250px; top: 15px; height: 21px; position: absolute">
   X
-  </button>`;
+  </button>
 
-  document.getElementById(current_cycle_step.at(-1)).appendChild(create_operation_block);
-  move_object(create_operation_block.id);
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="left: 145px; top: 50px; width: 105px; height: 25px">
+
+  <input type="text"
+  class="block-input" 
+  name="name" 
+  style="left: 145px; top: 130px; width: 105px; height: 25px">
+
+  <button type="button"
+  class="button"
+  alt=""
+  id = "togler_in_for${local_for}"
+  style="left: 60px; top: 95px; height: 25px; width: 160px; position: absolute">
+  Изменить
+  </button>`
+
+  document.getElementById(current_cycle_step.at(-1)).appendChild(for_block);
+  document.getElementById("program-sector-id").appendChild(for_change_zone);
+
+  move_object(for_block.id);
   
-  const deleteBtn = create_operation_block.querySelector(`#delete${count}`);
+  const changeBtn = document.querySelector(`#togler_in_for${local_for}`);
+  const deleteBtn = for_block.querySelector(`#delete${count}`);
+  const backBtn = document.getElementById(`togler_out_for${local_for}`);
+
+  changeBtn.onmousedown = function(event) {
+    event.stopPropagation();
+  }
+
+  deleteBtn.onmousedown = function(event) {
+    event.stopPropagation();
+  }
+
+  changeBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.push(`for${local_for}`);
+    document.getElementById(`for${local_for}`).classList.remove("hide");
+  }
+
+  backBtn.onclick = function(event) {
+    document.getElementById(current_cycle_step.at(-1)).classList.add("hide");
+    current_cycle_step.pop();
+    document.getElementById(current_cycle_step.at(-1)).classList.remove("hide");
+  }
 
   deleteBtn.onclick = function(event) {
-    check_childrens(create_operation);
-    create_operation_block.remove();
+    check_childrens(for_block);
+    for_block.remove();
   };
 
   console.log(count);
-  count+=1;
+  count += 1;
+  count_for += 1;
 }
+
 
 function create_output() {
   const create_output_block = document.createElement("div");
@@ -547,7 +1085,7 @@ function create_output() {
   const deleteBtn = create_output_block.querySelector(`#delete${count}`);
 
   deleteBtn.onclick = function(event) {
-    check_childrens(create_output);
+    check_childrens(create_output_block);
     create_output_block.remove();
   };
 
@@ -588,11 +1126,18 @@ function create_end() {
   count+=1;
 }
 
+document.getElementById('run-btn').addEventListener('click', () => {
+  const interpreter = new ScratchInterpreter();
+  interpreter.run();
+});
+
 document.getElementById("create-begin").addEventListener("click", create_begin);
 document.getElementById("create-variable").addEventListener("click", create_veriable);
+document.getElementById("create-array").addEventListener("click", create_array);
 document.getElementById("create-variable-edit").addEventListener("click", create_veriable_edit);
+document.getElementById("create-change-array").addEventListener("click", create_change_array);
 document.getElementById("create-if-else").addEventListener("click", create_if_else);
 document.getElementById("create-while").addEventListener("click", create_while);
-document.getElementById("create-operation").addEventListener("click", create_operation);
+document.getElementById("create-for").addEventListener("click", create_for);
 document.getElementById("create-output").addEventListener("click", create_output);
 document.getElementById("create-end").addEventListener("click", create_end);

@@ -39,6 +39,21 @@
       +
       </button>
 
+      <img src="block_select_sector_img/declaring-array.svg"
+      alt=""
+      width="300"
+      height="100"
+      style="position: relative; top: 80px">
+
+      <button 
+      id="create-array" 
+      class="button"
+      name="button"
+      type="button"
+      style="position: relative; font-size: 16px; top: 40px">
+      +
+      </button>
+
       <img src="block_select_sector_img/variable-edit.svg"
       alt=""
       width="300"
@@ -47,6 +62,21 @@
 
       <button 
       id="create-variable-edit" 
+      class="button"
+      name="button"
+      type="button"
+      style="position: relative; font-size: 16px; top: 70px">
+      +
+      </button>
+
+      <img src="block_select_sector_img/change_array.svg"
+      alt=""
+      width="300"
+      height="100"
+      style="position: relative; top: 100px;">
+
+      <button 
+      id="create-change-array" 
       class="button"
       name="button"
       type="button"
@@ -84,14 +114,14 @@
       +
       </button>
 
-      <img src="block_select_sector_img/operation.svg"
+      <img src="block_select_sector_img/for.svg"
       alt=""
       width="300"
       height="100"
       style="position: relative; top: 100px">
 
       <button 
-      id="create-operation" 
+      id="create-for" 
       class="button"
       name="button"
       type="button"
@@ -130,16 +160,29 @@
       </button>
     </div>
 
-    <div class="program-sector" id="program-sector-id">
-      <div class="program-sector-without-cycles" id="program-sector-without-cycles-id">
+    <div class="work-sector">
+      <div class="program-sector" id="program-sector-id">
+        <div class="program-sector-without-cycles" id="program-sector-without-cycles-id"></div>
         
       </div>
     </div>
+    <div class="output-sector">
+      <button
+      id="run-btn"
+      class="button"
+      name="button"
+      type="button">
+      Запуск
+      </button>
+      <div id="output-console" class="output-console"></div>
+    </div>
+    
 
     </div>
   </main>
 
   <script src="scripts/create_blocks.js"></script>
   <script src="json/dictionary_for_merge.js"></script>
+  <script src="scripts/interpreter.js"></script>
 </body>
 </html>

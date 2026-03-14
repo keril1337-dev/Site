@@ -1,8 +1,8 @@
 const dict_merge = {
   "begin_x_bottom" : 51,
   "begin_y_bottom" : 74,
-  "begin_x_top" : -100000000,
-  "begin_y_top" : -100000000,
+  "begin_x_top" : -1000,
+  "begin_y_top" : -1000,
   "begin_vistup_y" : 72, 
   "begin_vistup_x" : 22,
   "begin_vstup_x" : 0,
@@ -35,6 +35,24 @@ const dict_merge = {
   "while_vistup_x" : 54,
   "while_vistup_y" : 151,
 
+  "for_x_bottom" : 56,
+  "for_y_bottom" : 188,
+  "for_x_top" : 56,
+  "for_y_top" : 6,
+  "for_vstup_x" : 21,
+  "for_vstup_y" : 4,
+  "for_vistup_x" : 21,
+  "for_vistup_y" : 184,
+
+  "change-array_x_bottom" : 85,
+  "change-array_y_bottom" : 162,
+  "change-array_x_top" : 85,
+  "change-array_y_top" : 4,
+  "change-array_vstup_x" : 56,
+  "change-array_vstup_y" : 15,
+  "change-array_vistup_x" : 54,
+  "change-array_vistup_y" : 160,
+
   "output_x_bottom" : 39,
   "output_y_bottom" : 132,
   "output_x_top" : 39,
@@ -43,4 +61,13 @@ const dict_merge = {
   "output_vstup_y" : 3,
   "output_vistup_x" : 15,
   "output_vistup_y" : 130,
+
+  "end_x_bottom" : -1000,
+  "end_y_bottom" : -1000,
+  "end_x_top" : 51,
+  "end_y_top" : 6,
+  "end_vstup_x" : 20,
+  "end_vstup_y" : 1,
+  "end_vistup_x" : 0,
+  "end_vistup_y" : 0
 }

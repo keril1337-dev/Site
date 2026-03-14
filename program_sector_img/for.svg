@@ -40,19 +40,23 @@
   <g class="st4">
     <g class="st4">
       <g class="st4">
-        <text class="st2" transform="translate(26.93 11.33) scale(1.09 1)"><tspan x="0" y="0">если</tspan></text>
+        <g class="st4">
+          <text class="st2" transform="translate(6.8 13.2) scale(1.09 1)"><tspan x="0" y="0">для</tspan></text>
+        </g>
       </g>
     </g>
   </g>
   <g class="st4">
     <g class="st4">
       <g class="st4">
-        <text class="st3" transform="translate(5.77 27.83) scale(.94 1)"><tspan x="0" y="0">иначе</tspan></text>
+        <g class="st4">
+          <text class="st3" transform="translate(1.72 26.15) scale(.94 1)"><tspan x="0" y="0">повторить</tspan></text>
+        </g>
       </g>
     </g>
   </g>
   <rect class="st5" x="51.72" y="25.07" width=".39" height="2.98"/>
-  <path class="st1" d="M6.06,6.89h11.78c1.4,0,2.52,1.1,2.52,2.47h0c0,1.36-1.13,2.47-2.52,2.47H6.06c-1.4,0-2.52-1.1-2.52-2.47h0c0-1.36,1.13-2.47,2.52-2.47Z"/>
-  <path class="st1" d="M30.73,23.01h11.78c1.4,0,2.52,1.1,2.52,2.47h0c0,1.36-1.13,2.47-2.52,2.47h-11.78c-1.4,0-2.52-1.1-2.52-2.47h0c0-1.36,1.13-2.47,2.52-2.47Z"/>
+  <path class="st1" d="M30.73,22.6h11.78c1.4,0,2.52,1.1,2.52,2.47h0c0,1.36-1.13,2.47-2.52,2.47h-11.78c-1.4,0-2.52-1.1-2.52-2.47h0c0-1.36,1.13-2.47,2.52-2.47Z"/>
   <rect class="st5" x="40.55" y="7.27" width="11.56" height="4.18"/>
+  <path class="st1" d="M30.73,9.29h11.78c1.4,0,2.52,1.1,2.52,2.47h0c0,1.36-1.13,2.47-2.52,2.47h-11.78c-1.4,0-2.52-1.1-2.52-2.47h0c0-1.36,1.13-2.47,2.52-2.47Z"/>
 </svg>

@@ -1,0 +1,20 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 50" width="280" height="50">
+	<style>
+		tspan { white-space:pre } 
+		.s0 { fill: #4c97ff;stroke: #3373cc;stroke-width: 2 } 
+		.t1 { font-size: 24px;fill: #000000;font-family: "Myriad Pro" } 
+	</style>
+	<g id="Layer 1">
+		<path class="s0" d="m27 3h226c12.15 0 22 9.85 22 22 0 12.15-9.85 22-22 22h-226c-12.15 0-22-9.85-22-22 0-12.15 9.85-22 22-22z"/>
+		<text id="массив" transform="translate(5,13)">
+			<tspan x="98.7" y="16.8" class="t1">м</tspan><tspan  y="16.8" class="t1">а</tspan><tspan  y="16.8" class="t1">с</tspan><tspan  y="16.8" class="t1">с</tspan><tspan  y="16.8" class="t1">и</tspan><tspan  y="16.8" class="t1">в</tspan><tspan  y="16.8" class="t1">
+</tspan>
+		</text>
+		<text id="" transform="translate(132,25)">
+		</text>
+		<text id="" transform="translate(751.1,25)">
+		</text>
+		<text id="" transform="translate(134,24)">
+		</text>
+	</g>
+</svg>

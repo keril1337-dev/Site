@@ -13,25 +13,33 @@
         isolation: isolate;
       }
 
-      .st2, .st3 {
+      .st2 {
+        fill: #ce8a28;
+      }
+
+      .st3, .st4 {
         fill: #ffab19;
       }
 
-      .st3 {
+      .st4 {
         stroke: #cf8b17;
         stroke-width: 2px;
       }
     </style>
   </defs>
-  <path class="st3" d="M57.93,25.88v3.93h6.94v.67c0,2.55-1.66,4.63-3.72,4.63H6.16c-2.07,0-3.73-2.07-3.73-4.63V6.42c0-2.55,1.66-4.63,3.73-4.63h5.54v2.73h15.29V1.79h34.16c2.06,0,3.72,2.07,3.72,4.63v19.46s-6.94,0-6.94,0Z"/>
+  <path class="st4" d="M57.93,25.88v3.93h6.94v.67c0,2.55-1.66,4.63-3.72,4.63H6.16c-2.07,0-3.73-2.07-3.73-4.63V6.42c0-2.55,1.66-4.63,3.73-4.63h5.54v2.73h15.29V1.79h34.16c2.06,0,3.72,2.07,3.72,4.63v19.46h-6.94Z"/>
   <g class="st1">
     <g class="st1">
       <g class="st1">
         <g class="st1">
-          <text class="st0" transform="translate(12.27 15.19) scale(.89 1)"><tspan x="0" y="0">ПОВТОРЯТЬ ПОКА</tspan></text>
+          <g class="st1">
+            <text class="st0" transform="translate(12.27 15.19) scale(.89 1)"><tspan x="0" y="0">ПОВТОРЯТЬ ПОКА</tspan></text>
+          </g>
         </g>
       </g>
     </g>
   </g>
-  <rect class="st2" x="11.7" y="33.76" width="15.29" height="4.77"/>
+  <rect class="st3" x="11.7" y="33.76" width="15.29" height="4.77"/>
+  <rect class="st3" x="39.22" y="23.13" width="24.64" height="7.69"/>
+  <rect class="st2" x="63.86" y="26.88" width="2.03" height="1.97"/>
 </svg>
